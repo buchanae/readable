@@ -16,9 +16,12 @@
    Human curation is needed.
 
 
-# To do / Issues
+# To do / Issues / Ideas
 
 1. Unload page completely when starting readable. Possibly requires
    a navigation event, which leads to adding an entry to the back
    button history, which is something I don't like about Firefox's
    reader mode. Hmmmm. Possibly "loadReplace" in tabs.update().
+
+2. Possibly block large images? Or deprioritize them? Could use
+   content-length headers?
