@@ -12,19 +12,19 @@ browser.browserAction.onClicked.addListener(function(tab) {
   })
 })
 
+// TODO change context menu per page?
 browser.menus.create({
   id: "debug",
   title: "Debug",
-  type: "checkbox",
   contexts: ["browser_action"]
 })
 
 function setDebug(url, debug) {
   browser.storage.local.get(url).then((data) => {
-    var options = data[url] || {clean: true, debug: debug}
-    options.debug = debug
+    var options = data[url] || {clean: false, debug: false}
+    options.clean = true
+    options.debug = !options.debug
     data[url] = options
-    console.log("set debug data", data)
     browser.storage.local.set(data).then(() => {
       browser.tabs.reload({ bypassCache: true })
     })
@@ -33,14 +33,13 @@ function setDebug(url, debug) {
 
 browser.menus.onClicked.addListener((info, tab) => {
   if (info.menuItemId == "debug") {
-    setDebug(tab.url, info.checked)
+    setDebug(tab.url)
   }
 })
 
 browser.runtime.onMessage.addListener((message, sender, respond) => {
   return browser.storage.local.get(sender.url).then((data) => {
     var options = data[sender.url] || {clean: false, debug: false}
-    console.log("get data", options)
     respond(options)
     return options
   })
@@ -52,7 +51,6 @@ browser.webRequest.onHeadersReceived.addListener(
 
     return browser.storage.local.get(req.url).then((data) => {
       var options = data[req.url] || {clean: false, debug: false}
-      console.log("get req options", options)
 
       if (!options.clean) {
         return
