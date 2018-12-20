@@ -1,0 +1,30 @@
+{
+
+  "manifest_version": 2,
+  "name": "Readable",
+  "version": "0.1",
+
+  "description": "Cleans up webpages to make them readable.",
+
+  "icons": {
+    "48": "icons/readable.png"
+  },
+
+  "browser_action": {
+    "default_icon": "icons/readable.png",
+    "default_title": "readable"
+  },
+
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "permissions": ["activeTab", "menus", "storage", "webRequest", "webRequestBlocking", "<all_urls>"],
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["readable.js"],
+      "run_at": "document_start"
+    }
+  ]
+
+}
